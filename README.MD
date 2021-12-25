@@ -7,3 +7,5 @@
 В системе будут два типа пользователей: кандидаты и кадровики. Кандидаты будут публиковать резюме. Кадровики будут публиковать вакансии о работе.
 
 Кандидаты могут откликнуться на вакансию. Кадровик может пригласить на вакансию кандидата.
+
+[![Build Status](https://app.travis-ci.com/KarnaukhovKirill/job4j_dreamjob.svg?branch=main)](https://app.travis-ci.com/KarnaukhovKirill/job4j_dreamjob)
