@@ -5,10 +5,11 @@ import ru.job4j.dream.model.Post;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Store {
     private static final Store INST = new Store();
-
+    private final static AtomicInteger POST_ID = new AtomicInteger(4);
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
 
@@ -40,5 +41,10 @@ public class Store {
 
     public Collection<Candidate> findAllCandidates() {
         return candidates.values();
+    }
+
+    public void save(Post post) {
+        post.setId(POST_ID.incrementAndGet());
+        posts.put(post.getId(), post);
     }
 }
