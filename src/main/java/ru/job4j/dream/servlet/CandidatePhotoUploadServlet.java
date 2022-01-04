@@ -4,6 +4,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import ru.job4j.dream.util.Config;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,9 +26,11 @@ public class CandidatePhotoUploadServlet extends HttpServlet {
         String idCandidate = req.getParameter("id");
         factory.setRepository(repository);
         ServletFileUpload upload = new ServletFileUpload(factory);
+        Config config = new Config();
+        var folderPath = config.getProperty("CandidatePhotos");
         try {
             List<FileItem> items = upload.parseRequest(req);
-            File folder = new File("c:\\images\\");
+            File folder = new File(folderPath);
             if (!folder.exists()) {
                 folder.mkdir();
             }
