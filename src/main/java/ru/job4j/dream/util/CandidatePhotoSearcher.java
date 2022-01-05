@@ -6,8 +6,7 @@ public class CandidatePhotoSearcher implements PhotoSearcher {
 
     @Override
     public File search(String name) {
-        Config config = new Config();
-        String folder = config.getProperty("CandidatePhotos");
+        String folder = Config.getProperty("CandidatePhotos");
         File rsl = null;
         for (File file : new File(folder).listFiles()) {
             var fileName = file.getName().substring(0, file.getName().lastIndexOf("."));

@@ -26,8 +26,7 @@ public class CandidatePhotoUploadServlet extends HttpServlet {
         String idCandidate = req.getParameter("id");
         factory.setRepository(repository);
         ServletFileUpload upload = new ServletFileUpload(factory);
-        Config config = new Config();
-        var folderPath = config.getProperty("CandidatePhotos");
+        var folderPath = Config.getProperty("CandidatePhotos");
         try {
             List<FileItem> items = upload.parseRequest(req);
             File folder = new File(folderPath);

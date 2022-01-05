@@ -5,7 +5,7 @@ import java.util.Properties;
 
 public class Config {
 
-    public String getProperty(String param) {
+    public static String getProperty(String param) {
         return loadProperties().getProperty(param);
     }
 
