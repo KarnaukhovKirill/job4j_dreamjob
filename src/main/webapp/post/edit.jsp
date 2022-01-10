@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="ru.job4j.dream.model.Post" %>
 <%@ page import="ru.job4j.dream.store.DbStore" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!doctype html>
 <html lang="en">
 <head>
@@ -31,6 +32,22 @@
 <div class="container pt-3">
     <div class="row">
         <div class="card" style="width: 100%">
+            <ul class="nav">
+                <li>
+                    <a class="nav-link" href='<c:url value="../index.jsp"/>'>Главная</a>
+                </li>
+                </li>
+                <c:if test="${user != null}">
+                    <li class="nav-item">
+                        <a class="nav-link" href='<c:url value="/logout.do"/>'><c:out value="${user.name} | Выйти"/></a>
+                    </li>
+                </c:if>
+                <c:if test="${user == null}">
+                    <li class="nav-item">
+                        <a class="nav-link" href='<c:url value="../login.jsp"/>'>Войти</a>
+                    </li>
+                </c:if>
+            </ul>
             <div class="card-header">
                 <% if (id == null) { %>
                 Новая вакансия.
