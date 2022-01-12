@@ -5,6 +5,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
+
 import java.util.*;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -21,6 +23,7 @@ public class DbStoreTest {
     public void wipeTables() {
         store.delAllPosts();
         store.delAllCandidates();
+        store.delAllUsers();
     }
 
     @Test
@@ -46,7 +49,18 @@ public class DbStoreTest {
     }
 
     @Test
-    public void testSave() {
+    public void testFindAllUsers() {
+        var first = new User("First", "first@gmail.com", "123");
+        var second = new User("Second", "second@gmail.com", "435");
+        store.save(first);
+        store.save(second);
+        Collection<User> excepted = List.of(first, second);
+        var rsl = store.findAllUsers();
+        assertThat(rsl, is(excepted));
+    }
+
+    @Test
+    public void testSavePost() {
         var first = new Post(0, "First Post");
         store.save(first);
         assertThat(first, is(store.findPostById(first.getId())));
@@ -57,13 +71,27 @@ public class DbStoreTest {
     }
 
     @Test
-    public void testTestSave() {
+    public void testSaveCandidate() {
         var first = new Candidate(0, "First Candidate");
         store.save(first);
         assertThat(first, is(store.findCandidateById(first.getId())));
         var updatedFirst = new Candidate(first.getId(), "Updated First Candidate");
         store.save(updatedFirst);
         var rsl = store.findCandidateById(updatedFirst.getId());
+        assertThat(rsl, is(updatedFirst));
+    }
+
+    @Test
+    public void testSaveUser() {
+        var first = new User("First User", "email@yandex.ru", "qwerty123");
+        store.save(first);
+        assertThat(first, is(store.findUserById(first.getId())));
+        var updatedFirst = new User(first.getId(),
+                "Updated First User",
+                "email@yandex.ru",
+                "qwerty123");
+        store.save(updatedFirst);
+        var rsl = store.findUserById(updatedFirst.getId());
         assertThat(rsl, is(updatedFirst));
     }
 
@@ -84,6 +112,14 @@ public class DbStoreTest {
     }
 
     @Test
+    public void testFindUserById() {
+        var first = new User("User", "email@gmail.com", "123");
+        store.save(first);
+        var rsl = store.findUserById(first.getId());
+        assertThat(rsl, is(first));
+    }
+
+    @Test
     public void testDelCandidate() {
         var first = new Candidate(0, "new candidate");
         store.save(first);
@@ -100,6 +136,16 @@ public class DbStoreTest {
         assertThat(first, is(store.findPostById(first.getId())));
         store.delPost(first.getId());
         var posts = store.findAllPosts();
+        assertThat(posts, is(Collections.emptyList()));
+    }
+
+    @Test
+    public void testDelUser() {
+        var first = new User("User", "mail@yandex.ru", "333");
+        store.save(first);
+        assertThat(first, is(store.findUserById(first.getId())));
+        store.delUser(first.getId());
+        var posts = store.findAllUsers();
         assertThat(posts, is(Collections.emptyList()));
     }
 }

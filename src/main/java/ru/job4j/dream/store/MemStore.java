@@ -2,6 +2,7 @@ package ru.job4j.dream.store;
 
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -11,8 +12,10 @@ public class MemStore implements Store {
     private static final MemStore INST = new MemStore();
     private final static AtomicInteger POST_ID = new AtomicInteger(4);
     private final static AtomicInteger CANDIDATE_ID = new AtomicInteger(4);
+    private final static AtomicInteger USER_ID = new AtomicInteger(0);
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
+    private final Map<Integer, User> users = new ConcurrentHashMap<>();
 
     private MemStore() {
         posts.put(1, new Post(1,
@@ -47,12 +50,22 @@ public class MemStore implements Store {
     }
 
     @Override
+    public Collection<User> findAllUsers() {
+        return users.values();
+    }
+
+    @Override
     public Post findPostById(int id) {
         return posts.get(id);
     }
 
     public Candidate findCandidateById(int id) {
         return candidates.get(id);
+    }
+
+    @Override
+    public User findUserById(int id) {
+        return users.get(id);
     }
 
     @Override
@@ -63,11 +76,20 @@ public class MemStore implements Store {
         posts.put(post.getId(), post);
     }
 
+    @Override
     public void save(Candidate candidate) {
         if (candidate.getId() == 0) {
             candidate.setId(CANDIDATE_ID.incrementAndGet());
         }
         candidates.put(candidate.getId(), candidate);
+    }
+
+    @Override
+    public void save(User user) {
+        if (user.getId() == 0) {
+            user.setId(USER_ID.incrementAndGet());
+        }
+        users.put(user.getId(), user);
     }
 
     public boolean delCandidate(int id) {
@@ -80,6 +102,11 @@ public class MemStore implements Store {
     }
 
     @Override
+    public boolean delUser(int id) {
+        return users.remove(id, findUserById(id));
+    }
+
+    @Override
     public void delAllPosts() {
         posts.clear();
     }
@@ -87,5 +114,10 @@ public class MemStore implements Store {
     @Override
     public void delAllCandidates() {
         candidates.clear();
+    }
+
+    @Override
+    public void delAllUsers() {
+        users.clear();
     }
 }
