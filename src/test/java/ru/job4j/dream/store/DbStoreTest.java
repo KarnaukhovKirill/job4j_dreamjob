@@ -120,6 +120,14 @@ public class DbStoreTest {
     }
 
     @Test
+    public void testFindUserByEmail() {
+        var user = new User("New User", "email@yandex.ru", "321");
+        store.save(user);
+        var rsl = store.findUserByEmail(user.getEmail());
+        assertThat(rsl, is(user));
+    }
+
+    @Test
     public void testDelCandidate() {
         var first = new Candidate(0, "new candidate");
         store.save(first);
