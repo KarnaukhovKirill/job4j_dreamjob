@@ -2,6 +2,7 @@ package ru.job4j.dream.store;
 
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.model.Post;
+import ru.job4j.dream.model.User;
 
 public class MainStore {
     public static void main(String[] args) {
@@ -12,12 +13,21 @@ public class MainStore {
         store.save(candidate);
         printPosts(store);
         printCandidates(store);
+        User user = new User(0, "First User", "email@yandex.ru", "123");
+        store.save(user);
         System.out.println("------------");
         Post post2 = new Post(post.getId(), "Updated Java Job");
         store.save(post2);
         store.delCandidate(candidate.getId());
         printCandidates(store);
         printPosts(store);
+        printUsers(store);
+    }
+
+    private static void printUsers(Store store) {
+        for (User user : store.findAllUsers()) {
+            System.out.println(user.getId() + " " + user.getName());
+        }
     }
 
     private static void printPosts(Store store) {

@@ -1,8 +1,6 @@
 package ru.job4j.dream.servlet;
 
-import ru.job4j.dream.model.User;
 import ru.job4j.dream.store.DbStore;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +13,8 @@ public class AuthServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        var store = DbStore.instOf();
-        var user = store.findUserByEmail(email);
-        if (email.equals(user.getEmail()) && password.equals(user.getPassword())) {
+        var user = DbStore.instOf().findUserByEmail(email);
+        if (user != null || password.equals(user.getPassword())) {
             HttpSession sc = req.getSession();
             sc.setAttribute("user", user);
             resp.sendRedirect(req.getContextPath() + "/posts.do");

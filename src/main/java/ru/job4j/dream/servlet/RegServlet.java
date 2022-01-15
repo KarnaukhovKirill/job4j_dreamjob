@@ -17,7 +17,7 @@ public class RegServlet extends HttpServlet {
         String password = req.getParameter("password");
         String name = req.getParameter("name");
         boolean valid = EmailValidator.getInstance().isValid(email);
-        if (valid) {
+        if (valid && (DbStore.instOf().findUserByEmail(email) == null)) {
             var store = DbStore.instOf();
             store.save(new User(0, name, email, password));
             var user = store.findUserByEmail(email);
