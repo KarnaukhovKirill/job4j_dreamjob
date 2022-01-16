@@ -25,7 +25,8 @@ public class RegServlet extends HttpServlet {
             sc.setAttribute("user", user);
             resp.sendRedirect(req.getContextPath() + "/posts.do");
         } else {
-            req.setAttribute("error", "Не верный email");
+            String answer = valid ? "Email занят другим пользователем" : "Неправильно введён email";
+            req.setAttribute("error", answer);
             req.getRequestDispatcher("reg.jsp").forward(req, resp);
         }
     }
