@@ -132,9 +132,7 @@ public class DbStoreTest {
         var first = new Candidate(0, "new candidate");
         store.save(first);
         assertThat(first, is(store.findCandidateById(first.getId())));
-        store.delCandidate(first.getId());
-        Collection<Candidate> candidates = store.findAllCandidates();
-        assertThat(candidates, is(Collections.emptyList()));
+        assertThat(store.delCandidate(first.getId()), is(true));
     }
 
     @Test
