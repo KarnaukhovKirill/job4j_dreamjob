@@ -25,7 +25,7 @@
     <div class="card" style="width: 100%">
         <ul class="nav">
             <li>
-                <a class="nav-link" href='<c:url value="index.jsp"/>'>Главная</a>
+                <a class="nav-link" href='<c:url value="/index.jsp"/>'>Главная</a>
             </li>
             </li>
             <c:if test="${user != null}">
@@ -35,7 +35,7 @@
             </c:if>
             <c:if test="${user == null}">
                 <li class="nav-item">
-                    <a class="nav-link" href='<c:url value="login.jsp"/>'>Войти</a>
+                    <a class="nav-link" href='<c:url value="/login.jsp"/>'>Войти</a>
                 </li>
             </c:if>
         </ul>
