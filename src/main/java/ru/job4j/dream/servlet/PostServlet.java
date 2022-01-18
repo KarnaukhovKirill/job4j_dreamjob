@@ -11,15 +11,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class PostServlet extends HttpServlet {
-    private final Store store = DbStore.instOf();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String edit = req.getParameter("edit");
-        String path = edit != null ? "/post/edit.jsp" : "/posts.jsp";
+        String path = edit != null ? "/post/edit.jsp" : "post/posts.jsp";
         req.setAttribute("user", req.getSession().getAttribute("user"));
         if (edit == null) {
-            req.setAttribute("posts", store.findAllPosts());
+            req.setAttribute("posts", DbStore.instOf().findAllPosts());
         }
         req.getRequestDispatcher(path).forward(req, resp);
     }

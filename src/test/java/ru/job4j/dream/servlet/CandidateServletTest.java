@@ -1,11 +1,8 @@
 package ru.job4j.dream.servlet;
 
-import org.junit.After;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.job4j.dream.model.Candidate;
 import ru.job4j.dream.store.DbStore;
-import ru.job4j.dream.store.Store;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,18 +13,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class CandidateServletTest {
-    private static Store store;
-
-    @BeforeClass
-    public static void init() {
-        store = DbStore.instOf();
-    }
-
-    @After
-    public void wipeTables() {
-        store.delAllPosts();
-    }
-
     @Test
     public void whenCreatePost() throws ServletException, IOException {
         HttpServletRequest request = mock(HttpServletRequest.class);
