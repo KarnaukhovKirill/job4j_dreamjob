@@ -8,13 +8,22 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
-
   <style>
     body {
       background-color: antiquewhite;
     }
     .mask {
       height: 50px;
+    }
+    table {
+      counter-reset: rowNumber;
+    }
+
+    table tbody tr:before {
+      display: table-cell;
+      counter-increment: rowNumber;
+      content: counter(rowNumber);
+      text-align: center;
     }
   </style>
 <script>
@@ -30,6 +39,17 @@
     if (gender == null) alert($('#gender').attr('title'));
     return false;
   }
+
+  function addRow() {
+    const name = $('#name').val();
+    const secondName = $('#secondName').val();
+    const description = $('#description').val();
+    const gender = $('#gender').val();
+    $('#table tr:last').after('<tr><td></td>' + '<td>' + name + '</td>'
+                                + '<td>' + secondName + '</td>' + '<td>' + description + '</td> '
+                                + '<td>' + gender + '</td>' + '</tr>');
+  }
+
 </script>
 </head>
 <body class="text-dark">
@@ -71,43 +91,50 @@
         <label for="gender">Пол</label>
         <select class="custom-select" id="gender" title="Пол" required>
           <option selected disabled value="">Choose...</option>
-          <option value="Male">Мужской</option>
-          <option value="Female">Женский</option>
+          <option value="Мужской">Мужской</option>
+          <option value="Женский">Женский</option>
         </select>
       </div>
     </div>
     <div class="form-group">
       <button class="btn btn-primary" type="submit" onclick="return validate();">Отправить</button>
     </div>
+    <div class="form-group">
+      <button class="btn btn-primary" type="button" class="btn btn-default" onclick="addRow()">Add row</button>
+    </div>
   </form>
 <div class="p-3">
-  <table class="table table-borderless">
+  <table class="table table-borderless" id="table">
     <thead>
     <tr>
       <th scope="col">#</th>
       <th scope="col">Имя</th>
       <th scope="col">Фамилия</th>
       <th scope="col">Описание</th>
+      <th scope="col">Пол</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-      <th scope="row">1</th>
+      <td></td>
       <td>Иван</td>
       <td>Иванов</td>
       <td>Коммуникабельная внешность</td>
+      <td>Мужской</td>
     </tr>
     <tr>
-      <th scope="row">2</th>
+      <td></td>
       <td>Пётр</td>
       <td>Петров</td>
       <td>Я не очень умный, не особо люблю работать. Но! Я очень люблю кушать  мясо!</td>
+      <td>Мужской</td>
     </tr>
     <tr>
-      <th scope="row">3</th>
+      <td></td>
       <td>Лидия</td>
       <td>Волкова</td>
       <td>Начинающий бухгалтер с большим опытом работы по специальности</td>
+      <td>Женский</td>
     </tr>
     </tbody>
   </table>
