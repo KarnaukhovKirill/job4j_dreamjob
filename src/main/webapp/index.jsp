@@ -50,14 +50,70 @@
     <div class="row">
         <div class = "card" style="width: 100%">
             <div class="card-header">
-                Сегодняшние вакансие
+                <b>Сегодняшние кандидаты</b>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Фото</th>
+                        <th scope="col">Город</th>
+                        <th scope="col">Дата создания</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${candidates}" var="candidate">
+                        <tr>
+                            <td>
+                                <c:out value="${candidate.name}"/>
+                            </td>
+                            <td>
+                                <img src="<c:url value='/candidate/download?id=${candidate.id}'/>" width="100px" height="100px"/>
+                            </td>
+                            <td>
+                                <c:out value="${candidate.city}"/>
+                            </td>
+                            <td>
+                                <c:out value="${candidate.outputTime}"/>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
     <div class="row pt-3">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Сегодняшние кандидаты
+                <b>Сегодняшние вакансии</b>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Название</th>
+                        <th scope="col">Описание</th>
+                        <th scope="col">Дата создания</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach items="${posts}" var="post">
+                        <tr>
+                            <td>
+                                <c:out value="${post.name}"/>
+                            </td>
+                            <td>
+                                <c:out value="${post.description}"/>
+                            </td>
+                            <td>
+                                <c:out value="${post.created}"/>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

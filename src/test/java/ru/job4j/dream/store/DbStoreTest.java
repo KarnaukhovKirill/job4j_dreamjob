@@ -4,11 +4,14 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
+import java.sql.Timestamp;
 import java.util.*;
-import static org.hamcrest.Matchers.is;
+
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class DbStoreTest {
@@ -19,15 +22,9 @@ public class DbStoreTest {
         store = DbStore.instOf();
     }
 
-    @After
-    public void wipeTables() {
-        store.delAllPosts();
-        store.delAllCandidates();
-        store.delAllUsers();
-    }
-
     @Test
     public void testFindAllPosts() {
+        store.delAllPosts();
         var first = new Post(0, "First Post");
         var second = new Post(0, "Second Post");
         store.save(first);
@@ -39,17 +36,20 @@ public class DbStoreTest {
 
     @Test
     public void testFindAllCandidates() {
-        var first = new Candidate(0, "First Candidate");
-        var second = new Candidate(0, "Second Candidatte");
+        var first = new Candidate(0, "First Candidate", 1, new Timestamp(System.currentTimeMillis()));
+        var second = new Candidate(0, "Second Candidatte", 2, new Timestamp(System.currentTimeMillis()));
         store.save(first);
         store.save(second);
         Collection<Candidate> excepted = List.of(first, second);
-        var rsl = store.findAllCandidates();
+        var rsl = new ArrayList<>();
+        rsl.add(store.findCandidateById(first.getId()));
+        rsl.add(store.findCandidateById(second.getId()));
         assertThat(rsl, is(excepted));
     }
 
     @Test
     public void testFindAllUsers() {
+        store.delAllUsers();
         var first = new User("First", "first@gmail.com", "123");
         var second = new User("Second", "second@gmail.com", "435");
         store.save(first);
@@ -57,6 +57,36 @@ public class DbStoreTest {
         Collection<User> excepted = List.of(first, second);
         var rsl = store.findAllUsers();
         assertThat(rsl, is(excepted));
+    }
+
+    @Test
+    public void testFindAllCities() {
+        store.delAllCandidates();
+        store.delAllCities();
+        var moscow = new City("Moscow");
+        var paris = new City("Paris");
+        store.save(moscow);
+        store.save(paris);
+        Collection<City> excepted = List.of(moscow, paris);
+        var rsl = new ArrayList<>();
+        rsl.add(store.findCityById(moscow.getId()));
+        rsl.add(store.findCityById(paris.getId()));
+        assertThat(rsl, is(excepted));
+    }
+
+    @Test
+    public void testFindPostsLastDay() {
+        store.delAllPosts();
+        Calendar now = Calendar.getInstance();
+        var monthAgo = Calendar.getInstance();
+        monthAgo.set(2022, Calendar.JANUARY, 10);
+        var post = new Post(0, "Vacancy", now, "Description");
+        var oldPost = new Post(0, "Old Vacancy", monthAgo, "Description");
+        store.save(post);
+        store.save(oldPost);
+        var expected = List.of(post);
+        var rsl = store.findPostsByLastDay();
+        assertThat(rsl, is(expected));
     }
 
     @Test
@@ -72,10 +102,10 @@ public class DbStoreTest {
 
     @Test
     public void testSaveCandidate() {
-        var first = new Candidate(0, "First Candidate");
+        var first = new Candidate(0, "First Candidate", 1, new Timestamp(System.currentTimeMillis()));
         store.save(first);
         assertThat(first, is(store.findCandidateById(first.getId())));
-        var updatedFirst = new Candidate(first.getId(), "Updated First Candidate");
+        var updatedFirst = new Candidate(first.getId(), "Updated First Candidate", 1, new Timestamp(System.currentTimeMillis()));
         store.save(updatedFirst);
         var rsl = store.findCandidateById(updatedFirst.getId());
         assertThat(rsl, is(updatedFirst));
@@ -105,7 +135,7 @@ public class DbStoreTest {
 
     @Test
     public void testFindCandidateById() {
-        var first = new Candidate(0, "new candidate");
+        var first = new Candidate(0, "new candidate", 1, new Timestamp(System.currentTimeMillis()));
         store.save(first);
         var rsl = store.findCandidateById(first.getId());
         assertThat(rsl, is(first));
@@ -121,6 +151,7 @@ public class DbStoreTest {
 
     @Test
     public void testFindUserByEmail() {
+        store.delAllUsers();
         var user = new User("New User", "email@yandex.ru", "321");
         store.save(user);
         var rsl = store.findUserByEmail(user.getEmail());
@@ -128,8 +159,15 @@ public class DbStoreTest {
     }
 
     @Test
+    public void testFindCityByTitle() {
+        var city = new City("Krasnoyarsk");
+        store.save(city);
+        assertThat(store.findCityByTitle(city.getTitle()).getTitle(), is(city.getTitle()));
+    }
+
+    @Test
     public void testDelCandidate() {
-        var first = new Candidate(0, "new candidate");
+        var first = new Candidate(0, "new candidate", 1, new Timestamp(System.currentTimeMillis()));
         store.save(first);
         assertThat(first, is(store.findCandidateById(first.getId())));
         assertThat(store.delCandidate(first.getId()), is(true));
@@ -141,8 +179,7 @@ public class DbStoreTest {
         store.save(first);
         assertThat(first, is(store.findPostById(first.getId())));
         store.delPost(first.getId());
-        var posts = store.findAllPosts();
-        assertThat(posts, is(Collections.emptyList()));
+        assertThat(store.findPostById(first.getId()), is(nullValue()));
     }
 
     @Test
@@ -151,7 +188,6 @@ public class DbStoreTest {
         store.save(first);
         assertThat(first, is(store.findUserById(first.getId())));
         store.delUser(first.getId());
-        var posts = store.findAllUsers();
-        assertThat(posts, is(Collections.emptyList()));
+        assertThat(store.findUserById(first.getId()), is(nullValue()));
     }
 }

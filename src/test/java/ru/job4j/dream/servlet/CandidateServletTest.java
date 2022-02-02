@@ -19,6 +19,7 @@ public class CandidateServletTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         when(request.getParameter("id")).thenReturn("0");
         when(request.getParameter("name")).thenReturn("Harry Potter");
+        when(request.getParameter("city_id")).thenReturn(String.valueOf(1));
         new CandidateServlet().doPost(request, response);
         var candidates = DbStore.instOf().findAllCandidates().toArray();
         var candidate = (Candidate) candidates[candidates.length - 1];

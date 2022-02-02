@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class PostServlet extends HttpServlet {
     @Override
@@ -26,7 +28,7 @@ public class PostServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         DbStore.instOf().save(new Post(Integer.parseInt(req.getParameter("id")),
-                req.getParameter("name")));
+                req.getParameter("name"), Calendar.getInstance(), req.getParameter("description")));
         resp.sendRedirect(req.getContextPath() + "/posts.do");
     }
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Timestamp;
 
 public class CandidateServlet extends HttpServlet {
     @Override
@@ -25,8 +26,12 @@ public class CandidateServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
+        var city = DbStore.instOf().findCityByTitle(req.getParameter("Title"));
         DbStore.instOf().save(new Candidate(Integer.parseInt(req.getParameter("id")),
-                req.getParameter("name")));
+                req.getParameter("name"),
+                city.getId(),
+                city.getTitle(),
+                new Timestamp(System.currentTimeMillis())));
         resp.sendRedirect(req.getContextPath() + "/candidates.do");
     }
 }

@@ -1,6 +1,7 @@
 package ru.job4j.dream.store;
 
 import ru.job4j.dream.model.Candidate;
+import ru.job4j.dream.model.City;
 import ru.job4j.dream.model.Post;
 import ru.job4j.dream.model.User;
 
@@ -13,9 +14,11 @@ public class MemStore implements Store {
     private final static AtomicInteger POST_ID = new AtomicInteger(4);
     private final static AtomicInteger CANDIDATE_ID = new AtomicInteger(4);
     private final static AtomicInteger USER_ID = new AtomicInteger(0);
+    private final static AtomicInteger CITY_ID = new AtomicInteger(0);
     private final Map<Integer, Post> posts = new ConcurrentHashMap<>();
     private final Map<Integer, Candidate> candidates = new ConcurrentHashMap<>();
     private final Map<Integer, User> users = new ConcurrentHashMap<>();
+    private final Map<Integer, City> cities = new ConcurrentHashMap<>();
 
     private MemStore() {
         posts.put(1, new Post(1,
@@ -55,6 +58,37 @@ public class MemStore implements Store {
     }
 
     @Override
+    public Collection<City> findAllCities() {
+        return cities.values();
+    }
+
+    @Override
+    public City findCityByTitle(String title) {
+        City rsl = null;
+        for (City city : cities.values()) {
+            if (title.equals(city.getTitle())) {
+                rsl = city;
+                break;
+            }
+        }
+        if (rsl == null) {
+            rsl = new City(title);
+            save(new City(title));
+        }
+        return rsl;
+    }
+
+    @Override
+    public Collection<Post> findPostsByLastDay() {
+        return null;
+    }
+
+    @Override
+    public Collection<Candidate> findCandidatesByLastDay() {
+        return null;
+    }
+
+    @Override
     public Post findPostById(int id) {
         return posts.get(id);
     }
@@ -66,6 +100,11 @@ public class MemStore implements Store {
     @Override
     public User findUserById(int id) {
         return users.get(id);
+    }
+
+    @Override
+    public City findCityById(int id) {
+        return cities.get(id);
     }
 
     @Override
@@ -102,6 +141,14 @@ public class MemStore implements Store {
         users.put(user.getId(), user);
     }
 
+    @Override
+    public void save(City city) {
+        if (city.getId() == 0) {
+            city.setId(CITY_ID.incrementAndGet());
+        }
+        cities.put(city.getId(), city);
+    }
+
     public boolean delCandidate(int id) {
         return candidates.remove(id, findCandidateById(id));
     }
@@ -117,6 +164,11 @@ public class MemStore implements Store {
     }
 
     @Override
+    public boolean delCity(int id) {
+        return cities.remove(id, findCityById(id));
+    }
+
+    @Override
     public void delAllPosts() {
         posts.clear();
     }
@@ -129,5 +181,10 @@ public class MemStore implements Store {
     @Override
     public void delAllUsers() {
         users.clear();
+    }
+
+    @Override
+    public void delAllCities() {
+        cities.clear();
     }
 }
