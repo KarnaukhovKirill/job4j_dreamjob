@@ -19,11 +19,18 @@ public class Post {
         this.description = description;
     }
 
+    public Post(int id, String name, Calendar created) {
+        this.id = id;
+        this.name = name;
+        this.created = created;
+        this.description = "";
+    }
+
     public Post(int id, String name) {
         this.id = id;
         this.name = name;
         this.created = Calendar.getInstance();
-        this.description = "Здесь скоро появится описание вакансии";
+        this.description =  "";
     }
 
     public int getId() {
@@ -56,6 +63,10 @@ public class Post {
 
     public void setCreated(Calendar created) {
         this.created = created;
+    }
+
+    public Calendar getCalendar() {
+        return created;
     }
 
     @Override
