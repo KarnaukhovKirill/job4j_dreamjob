@@ -8,4 +8,6 @@
 
 Кандидаты могут откликнуться на вакансию. Кадровик может пригласить на вакансию кандидата.
 
+![alt text](https://github.com/KarnaukhovKirill/job4j_dreamjob/blob/js/src/img/1_Auto.bmp)
+
 [![Build Status](https://app.travis-ci.com/KarnaukhovKirill/job4j_dreamjob.svg?branch=main)](https://app.travis-ci.com/KarnaukhovKirill/job4j_dreamjob)
